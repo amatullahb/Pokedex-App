@@ -19,3 +19,28 @@ body {
     grid-template-rows: 1fr 5fr;
     border: black solid 1px;
 }
+/* pokemon types -- for card background color */
+.normal {
+    background-color: 
+}
+.fire {}
+.fighting {
+    background-color: #c92112;
+}
+.water {}
+.flying {}
+.grass {}
+.poison {
+    background-color: #ad3da4;
+}
+.electric {}
+.ground {}
+.psychic {}
+.rock {}
+.ice {}
+.bug {}
+.dragon {}
+.ghost {}
+.dark {}
+.steel {}
+.fairy {}
