@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios'); 
-const pokemon25 = 'https://pokeapi.co/api/v2/pokemon?offset=151&;amp;limit=25';
-const pokemon5 = 'https://pokeapi.co/api/v2/pokemon?offset=151&;amp;limit=5'; //tester to make it easier to see
+const pokemon25 = 'https://pokeapi.co/api/v2/pokemon?limit=25'; // 'https://pokeapi.co/api/v2/pokemon?offset=151&;amp;limit=25'
 
 class Pokemon {
     constructor(name, url) {
@@ -14,7 +13,7 @@ class Pokemon {
 
 router.get('/', asyncHandler(async (req, res) => { 
     let pokedex = [];
-    const rawPokedex = await getPokedexData(pokemon5);
+    const rawPokedex = await getPokedexData(pokemon25);
     rawPokedex.forEach(pokemon => {
         pokedex.push(new Pokemon(pokemon.name, pokemon.url))
     })
@@ -24,8 +23,7 @@ router.get('/', asyncHandler(async (req, res) => {
         pokemon.type = data.type;
         pokemon.img = data.img;
     }
-    console.log(pokedex);
-    res.render('index');
+    res.render('index', {pokedex: pokedex});
 }));
 
 function asyncHandler(cb) {
@@ -51,8 +49,3 @@ async function getPokemonData(pokemon) {
 }
 
 module.exports = router;
-
-// const pokedex = require('https://pokeapi.co/api/v2/pokemon?offset=151&;amp;limit=25').results;
-// results is an array of objects containing name and url
-    // url leads to .id and .types.type.name which gives the category (eg electric)
-// where to get image from?
