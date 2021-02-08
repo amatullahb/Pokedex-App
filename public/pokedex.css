@@ -24,6 +24,11 @@ body {
 h5 {
     margin: 15px;
 }
+/* img {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+} */
 /* pokemon types -- for card background color */
 .normal {
     background-color: #9a9e80;

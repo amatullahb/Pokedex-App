@@ -5,4 +5,8 @@ html(lang="en")
         link(rel="stylesheet" href="/static/pokedex.css")
     body
         h1 Pokédex
+        header
+            form(action="/card" method="post")
+                label Search for Pokémon by name: 
+                    input(type='text' name='pokemon_name') 
         block content

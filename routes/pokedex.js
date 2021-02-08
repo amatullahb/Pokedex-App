@@ -18,13 +18,29 @@ router.get('/', asyncHandler(async (req, res) => {
         pokedex.push(new Pokemon(pokemon.name, pokemon.url))
     })
     for await (const pokemon of pokedex) {
-        let data  = await getPokemonData(pokemon); // why does { pokemon.id, pokemon.type } = await getPokemonData(pokemon); produce an error?
+        let data  = await getPokemonData(pokemon.url); // why does { pokemon.id, pokemon.type } = await getPokemonData(pokemon); produce an error?
         pokemon.id = data.id;
         pokemon.type = data.type;
         pokemon.img = data.img;
     }
     res.render('index', {pokedex: pokedex});
 }));
+router.get('/card', asyncHandler((req, res) => {
+    res.render('card', { pokemon: pokemon });
+}));
+
+router.post('/card', async (req, res) => {
+    const name = req.body.pokemon_name;
+    console.log(req.body);
+    console.log(name);
+    const url = `https://pokeapi.co/api/v2/pokemon/${name}`;
+    const pokemonData = await getPokemonData(url);
+    let pokemon = new Pokemon(pokemonData.name, pokemonData.url);
+    pokemon.id = pokemonData.id;
+    pokemon.type = pokemonData.type;
+    pokemon.img = pokemonData.img;
+    res.render('card', { pokemon: pokemon });
+});
 
 function asyncHandler(cb) {
     // abstracts away try...catch
@@ -40,12 +56,14 @@ async function getPokedexData(url) {
     const res = await axios.get(url);
     return res.data.results
 }
-async function getPokemonData(pokemon) {
-    const res = await axios.get(pokemon.url);
+async function getPokemonData(url) { // `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`
+    const res = await axios.get(url);
     const id = res.data.id;
     const type = res.data.types[0].type.name;
     const img = res.data.sprites.front_default;
-    return {id, type, img};
+    const name = res.data.forms['0'].name;
+    return {name, id, type, img, url};
+
 }
 
 module.exports = router;
