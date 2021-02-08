@@ -132,6 +132,10 @@ function sortBy(sorter) {
         mapped = pokedex.map((pokemon, i) => {
             return {index: i, value: pokemon.type}
         })
+    } else if (sorter == 'ability') {
+        mapped = pokedex.map((pokemon, i) => {
+            return {index: i, value: pokemon.abilities}
+        })
     }
     mapped.sort((a,b) => {
         if (a.value > b.value) return 1;
