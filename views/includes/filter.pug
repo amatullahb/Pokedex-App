@@ -1,0 +1,29 @@
+form(action="/filter" method="post")
+   label(for="filter") Filter by type: 
+    select#filter(name='filter' onchange='this.form.submit()')
+     option(disabled selected value) Select a type
+     option(value='bug') Bug
+     option(value='dark') Dark
+     option(value='dragon') Dragon
+     option(value='electric') Electric
+     option(value='fairy') Fairy
+     option(value='fighting') Fighting
+     option(value='fire') Fire
+     option(value='flying') Flying
+     option(value='ghost') Ghost
+     option(value='grass') Grass
+     option(value='ground') Ground
+     option(value='ice') Ice
+     option(value='normal') Normal
+     option(value='poison') Poison
+     option(value='psychic') Psychic
+     option(value='rock') Rock
+     option(value='steel') Steel
+     option(value='water') Water
+form(action="/sort" method="post")
+   label(for="sort")  Sort by attribute: 
+    select#sort(name='sort' onchange='this.form.submit()')
+     option(disabled selected value) Select an attribute to sort by
+     option(value='name') Name
+     option(value='id') ID
+     option(value='type') Type
