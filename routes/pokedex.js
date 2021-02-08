@@ -13,6 +13,8 @@ class Pokemon {
 }
 
 let pokedex = [];
+// pokedex = [...await constructPokedex()];
+// constructPokedex();
 
 router.get('/', asyncHandler(async (req, res) => { 
     const rawPokedex = await getPokedexData(pokemon228);
@@ -72,6 +74,24 @@ function asyncHandler(cb) {
             res.render('error', {error: err});
         }
     }
+}
+async function constructPokedex() {
+    //use before router.get to avoid longer processing times when returning to / from /card
+    asyncHandler(async() => {
+        const rawPokedex = await getPokedexData(pokemon228);
+        rawPokedex.forEach(pokemon => {
+            pokedex.push(new Pokemon(pokemon.name, pokemon.url))
+        })
+        for await (const pokemon of pokedex) {
+            let data  = await getPokemonData(pokemon.url); 
+            pokemon.name = data.name;
+            pokemon.id = data.id;
+            pokemon.type = data.type;
+            pokemon.img = data.img;
+            pokemon.abilities = [...data.abilities];
+        }
+    });
+    // return pokedex;
 }
 async function getPokedexData(url) {
     const res = await axios.get(url);
