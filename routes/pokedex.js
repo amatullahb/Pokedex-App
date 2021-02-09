@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios'); 
 const pokemon25 = 'https://pokeapi.co/api/v2/pokemon?offset=151&;amp;limit=25';
+const pokemon100 = 'https://pokeapi.co/api/v2/pokemon?limit=100';
 const pokemon228 = 'https://pokeapi.co/api/v2/pokemon?limit=228';
 
 class Pokemon {
@@ -13,8 +14,6 @@ class Pokemon {
 }
 
 let pokedex = [];
-// pokedex = [...await constructPokedex()];
-// constructPokedex();
 
 router.get('/', asyncHandler(async (req, res) => { 
     const rawPokedex = await getPokedexData(pokemon228);
@@ -31,6 +30,9 @@ router.get('/', asyncHandler(async (req, res) => {
     }
     res.render('index', {pokedex: pokedex});
 }));
+router.get('/pokedex', (req, res) => {
+    res.render('index', {pokedex: pokedex});
+});
 
 router.get('/card', (req, res) => {
     res.render('card', { pokemon: pokemon });
@@ -53,7 +55,7 @@ router.get('/filter', (req, res) => {
 router.post('/filter', (req, res) => {
     const type = req.body.filter;
     let newPokedex = [...filterBy(type)];
-    res.render('index', {pokedex: newPokedex});
+    res.render('index', {pokedex: [...filterBy(type)]});
 });
 
 router.get('/sort', (req, res) => {
@@ -62,7 +64,7 @@ router.get('/sort', (req, res) => {
 router.post('/sort', (req, res) => {
     const sorter = req.body.sort;
     let newPokedex = [...sortBy(sorter)];
-    res.render('index', {pokedex: newPokedex});
+    res.render('index', {pokedex: [...sortBy(sorter)]});
 });
 
 function asyncHandler(cb) {
@@ -120,20 +122,21 @@ function filterBy(type){
 }
 function sortBy(sorter) {
     let mapped = [];
+    let tempPokedex = [...pokedex]
     if (sorter == 'name') {
-        mapped = pokedex.map((pokemon, i) => {
+        mapped = tempPokedex.map((pokemon, i) => {
             return {index: i, value: pokemon.name}
         })
     } else if (sorter == 'id') {
-        mapped = pokedex.map((pokemon, i) => {
+        mapped = tempPokedex.map((pokemon, i) => {
             return {index: i, value: pokemon.id}
         })
     } else if (sorter == 'type') {
-        mapped = pokedex.map((pokemon, i) => {
+        mapped = tempPokedex.map((pokemon, i) => {
             return {index: i, value: pokemon.type}
         })
     } else if (sorter == 'ability') {
-        mapped = pokedex.map((pokemon, i) => {
+        mapped = tempPokedex.map((pokemon, i) => {
             return {index: i, value: pokemon.abilities}
         })
     }
@@ -143,7 +146,7 @@ function sortBy(sorter) {
         else return 0;
     })
     const result = mapped.map(pokemon => {
-        return pokedex[pokemon.index]
+        return tempPokedex[pokemon.index]
     })
     return result
 }

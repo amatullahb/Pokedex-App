@@ -15,6 +15,7 @@ body {
     height: 350px;
     margin-top: 15px;
     margin-bottom: 15px;
+    border-radius: 3px;
 }
 .top {
     display: flex;
